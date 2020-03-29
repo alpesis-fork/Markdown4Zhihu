@@ -1,15 +1,5 @@
-+++
-title = "AAAI 2020可解释人工智能论文选读"
-date = 2020-02-09T22:16:16+08:00
-showonlyimage = false
-image = "https://i.pinimg.com/originals/11/3e/10/113e10ddd470a9b0249f27061afff9de.png"
-weight = 0
-draft = false
-+++
-
 本文主要列举了AAAI 2020 Tutorial中关于可解释人工智能的论文选集。
 
-<!--more-->
 
 # 可解释人工智能
 
