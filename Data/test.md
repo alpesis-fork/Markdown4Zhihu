@@ -1,363 +1,254 @@
 +++
-title = "你我似曾相识：如何计算相似度"
-date = 2020-03-24T13:55:19+08:00
+title = "AAAI 2020可解释人工智能论文选读"
+date = 2020-02-09T22:16:16+08:00
 showonlyimage = false
-image = ""
+image = "https://i.pinimg.com/originals/11/3e/10/113e10ddd470a9b0249f27061afff9de.png"
 weight = 0
 draft = false
 +++
 
-相似度计算通常采用距离公式求得。本文主要总结了对不同的数据类型求解对应距离的
-几种方法。
+本文主要列举了AAAI 2020 Tutorial中关于可解释人工智能的论文选集。
 
 <!--more-->
 
+# 可解释人工智能
 
-# 距离公式对比
+<img src="https://i.pinimg.com/originals/d1/dd/8a/d1dd8ad36ba93efa683425583d3c4261.png" />
 
-相似度的计算一般采用距离公式求得，比如推荐系统中计算两个人的相似度、两个物品的
-差异等。由于数据类型有数值型，也有类别型。前者一般为数字，可为浮点型或整数型；
-后者一般为标号，一般为不带任何单位的整数。对于不同的数据类型，需要采用相应的距离公
-式求得。
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-- 数值型
-    - 欧几里德距离
-    - 曼哈顿距离
-    - 切比雪夫距离
-- 类别型
-    - 余弦距离
-    - 杰卡德距离
-    - 汉明距离
+可解释人工智能旨在将过去黑盒的人工智能转成可解释的决策推断，从算法、产品到决策，皆为可解释的。
 
-有时候也会用到组合方法，将采用不同的距离公式分别对不同的变量求解相似度，然后再
-汇总成一个总相似度（再求一次距离）。
+<img src="https://i.pinimg.com/originals/3e/45/7b/3e457b250921961e5c66246702a6b23e.png" />
 
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-数值型距离公式对比
+现在存在的问题是：对于监督和非监督学习，推理结果为相关而非因果。而且准确度越高的模型（比如
+深度神经网络），其推理结果越没法解释。
 
-| 公式               | 数据      | 空间            | 形态                    |
-|:-------------------|:----------|:----------------|:------------------------|
-| 欧几里德距离       | 向量      | 欧几里德空间    | 直线                    |
-| 曼哈顿距离         | 向量      | Taxicab         | 网格（4方向）           |
-| 切比雪夫距离       | 向量      | Taxicab         | 网格（8方向）           |
 
-欧几里德距离与余弦距离对比
+模型
 
-| 公式               | 数据      | 空间            | 形态                    |
-|:-------------------|:----------|:----------------|:------------------------|
-| 欧几里德距离       | 向量      | 欧几里德空间    | 单位相关                |
-| 余弦距离           | 向量      |                 | 单位无关                |
+- 非线性函数
+    - 神经网络 (GAN, CNN, RNN)
+    - 组合方法 (XGB, 随机森林)
+    - 决策树
+- 多项式函数
+    - 统计模型 (AOG, SVM)
+    - 图模型 (Bayesian Belief Net, SLR, CRF, HBN)
+- 拟线性函数
+    - MLN
+    - 马尔可夫模型
+    - 线性模型
 
-类别型距离公式对比
+# 可解释人工智能在各领域的应用
 
-| 公式               | 数据      | 形态                    |
-|:-------------------|:----------|:------------------------|
-| 余弦距离           | 集合      | 角度                    |
-| 杰卡德距离         | 集合      | 韦恩图                  |
-| 汉明距离           | 文本      | 整数                    |
+<img src="https://i.pinimg.com/originals/ce/1e/cd/ce1ecdfab576d3815e6dccf68dd57580.png" />
 
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-# 数值型距离公式
+从学习到决策，每个应用领域都有其对应的需要解决的问题。
 
-## 欧几里德距离
+- **学习**: 人工智能、机器学习
+- **决策**: 搜索、博弈论、多智体
+- **应用**: 推断(KRR, UAI)、计算机视觉、自然语言处理、机器人学（规划、机器人）
 
-| 变体                             | 适用范畴                                                           |
-|:---------------------------------|:-------------------------------------------------------------------|
-| 欧几里德距离                     | 数据大小相对统一，没有极端数据存在                                 | 
-| 归一化欧几里德距离               | 数据单位相差太大，存在极端数据                                     |
+学习
 
-### 欧几里德距离
+| 类别                    | 模型              | 问题      |
+|:------------------------|:------------------|:----------|
+| 人工智能                | 代理模型 | 如何总结智能系统行为的动机（动机、理由、理解）以及决策的因果关系？ |
+| 机器学习                | 相关图、关键特征 | 哪些特征对分类至关重要？ |
 
-<img src="http://rosalind.info/media/Euclidean_distance.png" />
+决策
 
-图片来源: Rosalind. (n.d.). [Euclidean Distance](http://rosalind.info/glossary/euclidean-distance/)
+| 类别                    | 模型              | 问题      |
+|:------------------------|:------------------|:----------|
+| 搜索                    | 冲突消解 | 哪些约束可以放宽？ |
+| 博弈论                  | Shapely值  | 哪些特征组合最优？ |
+| 规划                    | 规划精细化 | 哪些行为对计划有效？|
+| 多智体                  | 策略总结 | 哪个多智体做规划和决策？哪个玩家贡献最多？为什么产生这样的机制？ |
 
-欧几里德距离，两点必经一线，即两点间的距离。
+应用
 
-#### 公式
+| 类别                    | 模型              | 问题      |
+|:------------------------|:------------------|:----------|
+| 推理： KRR          | Abduction, Diagnosis | 哪个公理负责推断（比如，分类）？ |
+| 推理： UAI          | 基于机器学习 | 非确定性作为可解释的替代 |
+| 计算机视觉          | 显著性图、非确定性图 | 哪个复杂特征作为分类？ |
+| 自然语言处理        | 基于机器学习       | 哪个实体作为分类？ |
+| 机器人学            | 基于可叙述的模型           | 哪些决策或多模态的决策引发行为？ |
 
-在欧几里德空间，存在两点$p(x_1, y_1)$和$q(x_2, y_2)$， 
 
-$$d_2(p, q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+## 可解释机器学习
 
-在欧几里德空间，存在两点$p(p_1, p_2, ..., p_n)$和$q(q_1, q_2, ..., q_n)$，
+### 可解释模型
 
-$$d_n(p, q) = \sqrt{\sum\_{i=1}^{n} (q_i - p_i)^2}$$
+<img src="https://i.pinimg.com/originals/ea/d9/cd/ead9cdeaa7ed1c30b4e86d2dc1055737.png" />
 
-#### 应用
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-| 姓名 | 年龄 | 分数 |
-|:-----|:----|:------|
-| 小明 | 20  | 90    |
-| 小李 | 30  | 80    |
-| 小王 | 40  | 95    |
+论文参考：
 
-小明(`p(20, 90)`)和小李(`q(30, 80)`)的相似度为：
+- **朴素贝叶斯模型**
+    - Igor Kononenko. Machine Learning for medical diagnosis: history, state of the art and perspective, Artificial Intelligence in medicine, 23:89-109, 2001
+- **反事实假设**
+    - Brent D. Mittelstadt, Chris Russell, Sandra Wachter: Explaining Explanations in AI. FAT 2019: 279-288
+    - Rory Mc Grath, Luca Costabello, Chan Le Van, Paul Sweeney, Farbod Kamiab, Zhao Shen, Freddy Lecue: Interpretable Credit Application Predictions With Conterfacual Explanations. CoRR abs/1811.05245 (2018)
 
-$$d = \sqrt{(20 - 30)^2 + (90 - 80)^2}$$
+### 人工神经网络
 
-年龄(`p(20, 30, 40)`)和分数(`q(90, 80, 95)`)的相似度为：
+<img src="https://i.pinimg.com/originals/17/8e/09/178e09f30d4eb562466e9284c13a2c23.png" />
 
-$$d = \sqrt{(20 - 90)^2 + (30 - 80)^2 + (40 - 95)^2}$$
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-### 归一化欧几里德距离
+论文参考：
 
-#### 公式
+- **深度网络属性**
+    - Mukund Sundararajan, Ankur Taly, and Qiqi Yan. Axiomatic attribution for deep networks. In ICML, pp. 3319-3328, 2017
+    - Avanti Shrikumar, Peyton Greenside, Anshul Kundaje: Learning Important Features Through Propagating Activation Differences. ICML 2017: 3145-3153.
+- **自编码/自原型**
+    - Chaofan Chen, Oscar Li, Alina Barnett, Jonathan Su, Cynthia Rudin: This looks like that: deep learning for interpretable image recognition: CoRR abs/1806.10574 (2018)
+    - Oscar Li, Hao Liu, Chaofan Chen, Cynthia Rudin: Deep Learning for Case-based Reasoning Through Prototypes: A Neural Network That Explains Its Predictions. AAAI 2018: 3530-3527.
+- **注意力机制**
+    - Edward Choi, Mohammad Taha Bahadori, Jimeng Sun, Joshua Kulas, Andy Schuetz, Walter F. Stewart: RETAIN: An Interpretable Predictive Model for Healthcare using Reverse Time Attention Mechanism. NIPS 2016: 3504-3512.
+    - D. Bahdanau, K. Cho, and Y. Bengio. Neural machine translation by jointly learning to align and translate. International Conference on Learning Representations, 2015.
+- **代理模型**
+    - Mark Craven, Jude W. Shavlik: Extracting Tree-Structured Representations of Trained Networks. NIPS 1995: 24-30.
 
-在欧几里德空间，存在两点$p(p_1, p_2, ..., p_n)$和$q(q_1, q_2, ..., q_n)$，
+### 计算机视觉
 
-$$d_n(p, q) = \sqrt{\sum\_{i=1}^{n} \frac{(q_i - p_i)^2}{n}}$$
+<img src="https://i.pinimg.com/originals/40/a5/55/40a5559a091069da07c4a759d6f235a5.png" />
 
-#### 应用
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-| 姓名 | 年龄 | 分数 | 身高 | 体重 |
-|:-----|:----|:------|:-------|:-------|
-| 小明 | 20  | 90    | 1.75   | 1.60   |
-| 小李 | 30  | 80    | 1.90   | 3.00   |
-| 小王 | 40  | 95    | 1.50   | 0.90   |
+论文参考：
 
+- **可解释单元**
+    - David Bau, Bolei Zhou, Aditya Khosia, Aude Oliva, Antonio Torralba: Network Dissection: Quantifyingn Interpretability of Deep Visual Representations. CVPR 2017: 3319-3327.
+- **非确定性图**
+    - Alex Kendall, Yarin Gal: What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision? NIPS 2017: 5580-5590.
+- **直观解释**
+    - Lisa Anne Hendricks, Zeynep Akata, Marcus Rohrbach, Jeff Donahue, Bernt Schiele, Trevor Darrell: Generating Visual Explanations. ECCV (4) 2016: 3-19.
+- **显著性图**
+    - Julius Adebayo, Justin Gilmer, Michael Muelly, Ian J. Goodfellow, Moritz Hardt, Been Kim: Sanity Checks for Saliency Maps. NeurIPS 2018: 9525-9536.
 
-小明(`p(20, 90, 1.75, 1.6)`)和小李(`q(30, 80, 1.9, 3.0)`)的相似度为：
+## 可解释人工智能
 
-$$
-d = \sqrt{
-    \frac{(20 - 30)^2}{4} + 
-    \frac{(90 - 80)^2}{4} +
-    \frac{(1.75 - 1.9)^2}{4} +
-    \frac{(1.6 - 3.0)^2}{4} 
-}
-$$
+### 博弈论
 
-分数(`p(90, 80, 95)`)和身高(`q(1.75, 1.9, 1.5)`)的相似度为：
+<img src="https://i.pinimg.com/originals/bd/98/c3/bd98c381e56dd6c873482e8eb436917c.png" />
+图片来源： AAAI 2020 Tutorial: Explainable AI
 
-$$
-d = \sqrt{
-    \frac{(90 - 1.75)^2}{3} + 
-    \frac{(80 - 1.90)^2}{3} + 
-    \frac{(95 - 1.50)^2}{3}  
-}
-$$
+论文参考：
 
+- **Shapley Additive Explanation**
+    - Scott M. Lundberg, Su-In Lee: A Unified Approach to Interpreting Model Predictions. NIPS 2017: 4768-4777
+- **L-Shapley and C-Shapley (with graph structure)**
+    - Jianbo Chen, Le Song, Martin J. Wainwright, Michael I. Jordan: L-Shaley and C-Shapley: Efficient Model Interpretation for Structured Data. ICLR 2019
+- **Instance-wise Feature Importance (Causal Influence)**
+    - Erik Strumbelj and Igor Konoenko. An efficient explantion of individual classifications using game theory. Journal of Machine Learning Research, 11:1-18, 2010.
+    - Anupam Datta, Shayak Sen, and Yair Zick. Algorithmic transparency via quantitative input influence: Theory and experiments with learning systems. In Security and Privacy (SP), 2016 IEEE Synposium on, pp. 598-617. IEEE, 2016.
 
-## 曼哈顿距离
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Manhattan_distance.svg/566px-Manhattan_distance.svg.png" />
+### 搜索与决策满足
 
-图片来源: Wikipedia. (n.d.). [Manhattan Distance](https://en.wikipedia.org/wiki/File:Manhattan_distance.svg)
+<img src="https://i.pinimg.com/originals/16/77/80/1677801b293f9d4d88a42d93262a9473.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-曼哈顿距离主要用于计算网格（只允许上下左右移动）搜索空间的距离，比如棋盘、地图中的距离计算。
-曼哈顿距离为两点间距离的绝对值的和。
+论文参考：
 
-### 公式
+- **冲突消解**
+    - Barry O'Sullivan, Alexandre Papadopoulos, Boi Faltings, Peral Pu: Representative Explanations for Over-Constrained Problems. AAAI 2007: 323-328
+- **稳健性计算**
+    - Hebrard, E., Hnich, B., & Walsh, T. (2004, July). Robust solutions for constraint satisfaction and optiimization. In ECAI (Vol. 16, p. 186).
+- **约束放松**
+    - Ulrich Junker: QUICKXPLAIN: Preferred Explanations and Relaxations for Over-Constrained Problems. AAAI 2004: 167-172.
 
-在网格空间中，存在两点$p(x_1, y_1)$和$q(x_2, y_2)$，
+### 知识表征和推理
 
-$$d_2(p, q) = |x_2 - x_1| + |y_2 - y_1|$$
+<img src="https://i.pinimg.com/originals/d3/95/9f/d3959f5fb9d85619a70fa4a377f21edb.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-在网格空间中，存在两点$p(x_1, x_2, ..., x_n)$和$q(y_1, y_2, ..., y_n)$，
+论文参考：
 
-$$d_n(p, q) = \sum\_{i=1}^n |x_i - y_i|$$
+- **解释推理（通过正当理解），如包容**
+    - Deborah L. McGuinness, Alexander Borgida: Explaining Subsumption in Description Logics. IJCAI (1) 1995: 816-821
+- **诱因推理（贝叶斯网络）**
+    - David Poole: Probabilistic Horn Abduction and Bayesian Networks. Artif. Intell. 64(1): 81-129 (1993)
+- **诊断推理**
+    - Alban Grastien, Patrick Haslum, Sylvie Thiebaux: Conflix-Based Diagnosis of Discrete Event Systems: Theory and Practice. KR 2012
 
-### 应用
+### 多智体系统
 
-在一张二维地图中，存在两个地点A和B。
+<img src="https://i.pinimg.com/originals/62/f3/95/62f3954202c442bfd8be3cc113aa5ac3.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-<img src="https://i.pinimg.com/originals/e5/61/19/e5611940d4d42f6c31372566a83e24c1.png" />
+论文参考：
 
-图片来源：101Computing.com. (n.d.). [Manhattan distance calculator](https://www.101computing.net/manhattan-distance-calculator/)
+- **智能体冲突和有害交互的解释**
+    - Katia P. Syncara, Massimo Paolucci, Martin Van Velsen, Joseph A. Giampap: The RETSINA MAS Infrastructure. Autonomous Agents and Multi-Agent Systems 7(1-2): 29-48 (2003)
+- **智能体策略归纳**
+    - Dfra Amir, Finale Doshi-Velez, David Sarne: Agent Strategy Summarization. AAMAS 2018: 1203-1207
+- **可解释智能体**
+    - Joost Broekens, Maaike Harbers, Koen V. Hindriiks, Karel van den Bosch, Catholijn M. Jonker, John-Jules Ch. Meyer: Do You Get It? User-Evaluated Explainable BDI Agents. MATES 2010: 28-39
+    - W. Lewis Johnson: Agents that Learn to Explain Themselves. AAAI 1994: 1257-1263.
 
+### 自然语言处理
 
-#### 欧几里德距离
+<img src="https://i.pinimg.com/originals/0c/79/4b/0c794b04416b1365ab60c1ca60ec78d8.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-<img src="https://i.pinimg.com/originals/a3/3f/3c/a33f3cc227a51a8931255948b43494fe.png" />
+论文参考：
 
-图片来源：101Computing.com. (n.d.). [Manhattan distance calculator](https://www.101computing.net/manhattan-distance-calculator/)
+- **可解释自然语言处理**
+    - Hui Liu, Qingyu Yin, William Yang Wang: Towards Explainable NLP: A Generative Explanation Framework for Text Classification. CoRR abs/1811.00196 (2018)
+- **自然语言处理LIME**
+    - Marco Tulio Ribeiro, Sameer Singh, Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. KDD 2016: 1135-1144
+- **自然语言处理调试器**
+    - Hendrik Strobelt, Sebastian Gehrmann, Hanspeter Pfister, Alexander M. Rush: LSTMVis: A Tool for Visual Analysis of Hidden State Dynamics in Recurrent Neural Networks. IEEE Trans. Vis. Comput. Graph. 24(1): 667-676(2018)
+    - Hendrik Strobelt, Sebastian Gehrmann, Michael Behrisch, Adam Perer, Hanspeter Pfister, Alexander M. Rush: Seq2seq-Vis: A Visual Debugging Tool for Sequence-toSequence Models. IEEE Trans. Vis. Comput. Graph. 25(1): 353-363 (2019)
 
-<img src="https://i.pinimg.com/originals/b6/7a/6e/b67a6e41e851b5b0f70e8e2283afcaa6.png" />
+### 规划与调度
 
-图片来源：101Computing.com. (n.d.). [Manhattan distance calculator](https://www.101computing.net/manhattan-distance-calculator/)
+<img src="https://i.pinimg.com/originals/fa/2d/15/fa2d15bb870c5151669f683d4babd097.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-#### 曼哈顿距离
+论文参考：
 
-<img src="https://i.pinimg.com/originals/6d/bb/ad/6dbbad3be99ef211c011b3414e0aa211.gif" />
+- **XAI规划**
+    - Rita Borgo, Michael Cashmore, Daniele Magazzeni: Towards Providing Explanations for AI Planner Decisions. CoRR abs/1810.06338 (2018)
+- **Human-in-the-loop规划**
+    - Maria Fox, Derek Long, Daniele Magazzeni: Explainable Planning. CoRR abs/1709.10256 (2017)
+- (人工) **规划对比**
 
-图片来源：101Computing.com. (n.d.). [Manhattan distance calculator](https://www.101computing.net/manhattan-distance-calculator/)
+### 机器人学
 
-<img src="https://i.pinimg.com/originals/94/85/7a/94857aa00a840bedc0200314528db3f2.png" />
+<img src="https://i.pinimg.com/originals/49/62/17/496217a006637b958607990ef63932d8.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-图片来源：101Computing.com. (n.d.). [Manhattan distance calculator](https://www.101computing.net/manhattan-distance-calculator/)
+论文参考：
 
-A和B两点间的距离：
+- **自主机器人体验述说**
+    - Stephanie Rosenthal, Sai P Selvaraj, and Manuela Veloso. Verbalization: Narration of autonomous robot experience. In IJCAI, pages 862-868. AAAI Pres, 2016.
+    - Daniel J Brooks et al. 2010. Towards State Summarization for Autonomous Robots. In AAAI Fall Symoposium: Dialog with Robots, Vol. 61.62.
+- **从决策树到人性化信息**
+    - Raymond Ka-Man Sheh: "Why Did You Do That?" Explainable Intelligent Robots. AAAI Workshops 2017
 
-- 欧几里德距离：两点间的最短距离；
-- 曼哈顿距离：两点间（只允许上下左右移动）的网格距离。
+### 非确定性推理
 
-## 切比雪夫距离
+<img src="https://i.pinimg.com/originals/3a/fe/a1/3afea1ad4b55661e8fe50803876c0c9a.png" />
+图片来源：AAAI 2020 Tutorial: Explainable AI
 
-<img src="https://iq.opengenus.org/content/images/2018/12/distance.jpg" />
+论文参考：
 
-图片来源：Open Genus. (n.d.). [Euclidean v.s. Manhattan v.s. Chebyshev Distances](https://iq.opengenus.org/euclidean-vs-manhattan-vs-chebyshev-distance/)
+- **概率图模型**
+    - Daphne Koller, Nir Friedman: Probabilistic Graphical Models - Principles and Techniques. MIT PRess 2009, ISBN 978-0-262-01319-2, pp. I-XXXV, 1-1231
 
-### 公式
+# 参考目录
 
-在网格空间中，存在两点$p(x_1, y_1)$和$q(x_2, y_2)$，
+- AAAI. (2020). [Explainable AI: Foundations, Industrial Applications, Practical Challenges, and Lessons Learned](https://xaitutorial2020.github.io/#)
+- Freddy Lecue, Krishna Gade, Sahin Cem Geyik, Krishnaram Kenthapadi, Varun Mithal, Ankur Taly, Riccardo Guidotti, Pasquale Minervini. (2020). [Explainable AI: PPT](https://xaitutorial2020.github.io/raw/master/slides/aaai_2020_xai_tutorial.pdf)
 
-$$d_2(p, q) = \max(|x_2 - x_1|, |y_2 - y_1|)$$
-
-在网格空间中，存在两点$p(x_1, x_2, ..., x_n)$和$q(y_1, y_2, ..., y_n)$，
-
-$$d_n(p, q) = \max_i (|x_i - y_i|)$$
-
-### 应用
-
-在二维地图中，初始点为（0, 0），分别计算从初始点往各方向的欧几里德距离、曼哈顿
-距离和切比雪夫距离。
-
-#### 欧几里德距离
-
-<img src="https://i.pinimg.com/originals/76/81/06/7681062c5eb866974f1b7ed7e867cc6f.png" />
-
-图片来源： Chris Ridley. (2018). [Measuring Distance](https://github.com/Chris3606/GoRogue/wiki/Measuring-Distance)
-
-通常情况下，网格地图并不使用欧几里德距离来计算，如果需要用到此公式，则其近似于往8个方向
-扩散的圆形。
-
-
-#### 曼哈顿距离
-
-<img src="https://i.pinimg.com/originals/43/cd/0b/43cd0b0571c1e8abe7efe46af178cbc7.png" />
-
-图片来源：Chris Ridley. (2018). [Measuring Distance](https://github.com/Chris3606/GoRogue/wiki/Measuring-Distance)
-
-在网格空间里，可以往上下左右4个方向移动，曼哈顿距离则为该4方向移动1步、2步或更多。
-距离计算如图所示。
-
-#### 切比雪夫距离
-
-<img src="https://i.pinimg.com/originals/41/67/e3/4167e37ada30b457db43e5a1398870ed.png" />
-
-图片来源： Chris Ridley. (2018). [Measuring Distance](https://github.com/Chris3606/GoRogue/wiki/Measuring-Distance)
-
-在网格空间中，切比雪夫距离为周边8个方向的距离，比如在游戏地图中，允许玩家从原地往8个方向
-移动。移动步数即为距离，往8个方向中的任一个方位移动，其成本是等价的。
-
-
-# 类别型距离公式
-
-## 余弦距离
-
-<img src="https://i.pinimg.com/originals/1b/35/7d/1b357d3d3a9025a020116b07f77948b8.png" />
-
-图片来源：Chris Emmery. (2017). [Euclidean vs. Cosine Distance](https://cmry.github.io/notes/euclidean-v-cosine)
-
-如图所示，$\theta$为余弦距离，$d$为欧几里德距离。如果不需要考虑数值单位，如文本距离，
-一般使用余弦距离，而非欧几里德距离计算相似度。
-
-### 公式
-
-假设有两个集合A和B，
-
-$$
-A \odot B = \parallel A\parallel \parallel B\parallel \cos \theta
-$$
-
-那么，
-
-$$
-\begin{aligned}
-\cos \theta = d(A, B) &= \frac{AB}{\parallel A \parallel \times \parallel B \parallel}  \\\ 
-            &= \frac{\sum\_{i=1}^n A\_i \times B\_i}{\sqrt{\sum\_{i=1}^n A\_i^2} \times \sqrt{\sum\_{i=1}^n B\_i^2}}
-\end{aligned}
-$$
-
-### 应用
-
-假设小明和小李分别对各类兴趣爱好打分（1-10分），分值如下表：
-
-| 兴趣   | 小明 | 小李 |
-|:--------|:-----|:----|
-| 音乐   | 3 | 10 |
-| 阅读   | 8 | 8  |
-| 运动  | 7 | 6  |
-| 学习   | 5 | 6  |
-| 园艺  | 2 | 4  |
-| 厨艺 | 9 | 5  |
-
-那么，小明和小李的兴趣相似度为：
-
-$$
-\begin{aligned}
-d\_\text{John\_and\_Joe} 
-&= \frac{3 \times 10 + 8 \times 8 + 7 \times 6 + 5 \times 6 + 2 \times 4 + 9 \times 5}
-        {\sqrt{3^2 + 8^2 + 7^2 + 5^2 + 2^2 + 9^2} \times \sqrt{10^2 + 8^2 + 6^2 + 6^2 + 4^2 + 5^2}} \\\ 
-&= \frac{219}{15.2315 \times 16.6433} \\\ 
-&= 0.8639 
-\end{aligned}
-$$
-
-## 杰卡德距离
-
-<img src="https://i.pinimg.com/originals/45/f3/0c/45f30ce0f9ad83ea4cf7233f7845eb3f.png" />
-
-图片来源：Euge Inzaugarat. (2019). [How to measure distances in machine learning](https://towardsdatascience.com/how-to-measure-distances-in-machine-learning-13a396aa34ce)
-
-### 公式
-
-假设存在两个集合A和B，两者的相似度为：
-
-$$d(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
-
-### 应用
-
-假设存在两个水果集合A和B，
-
-A = {"苹果", "梨", "树莓"}  
-B = {"苹果", "西瓜"}
-
-那么集合A和B的相似度为多少？
-
-$$
-\begin{aligned}
-d(A, B) &= \frac{|A \cap B|}{|A \cup B|} \\\ 
-        &= \frac{1}{4}
-\end{aligned}
-$$
-
-## 汉明距离
-
-汉明距离主要用于计算两个相同长度的字符串的不同字符位数。
-
-### 应用
-
-以下字符串的汉明距离为：
-
-- ka`rol`in and ka`thr`in is 3.
-- k`a`r`ol`in and k`e`r`st`in is 3.
-- 10`1`1`1`01 and 10`0`1`0`01 is 2.
-- 2`17`3`8`96 and 2`23`3`7`96 is 3.
-
-
-# 组合方法
-
-
-## 全局距离和局部距离
-
-组合方法，即多个距离公式组合使用，一般定义一个全局距离
-公式以及多个局部距离公式。先计算局部距离数值，再综合计算
-一个全局距离。
-
-### 公式
-
-全局距离公式
-
-$$D(p, q) = \sum\_{i=1}^n w\_i d(p, q)$$
-
-其中$d(p, q)$为局部距离公式，局部距离公式可为上述公式的任一种，取决于
-需要解决的问题以及数据类型。
-
-
-# 扩展阅读
-
-- Ratner, B. Pythagoras: Everyone knows his famous theorem, but not who discovered it 1000 years before him. J Target Meas Anal Mark 17, 229–242 (2009). https://doi.org/10.1057/jt.2009.16
-- Krause, Eugene F. (1937). Taxicab Geometry : an adventure in non-Euclidean geometry. https://archive.org/details/taxicabgeometrya0000krau/mode/2up
+<img src="https://i.pinimg.com/originals/0b/26/e0/0b26e066f574b9be379f427efdf4474c.png" />
 
